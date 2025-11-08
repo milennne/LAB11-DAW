@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+<header th:replace="layout/layout :: header"></header>
+
+<div class="container">
+    <h1 class="text-secondary border border-success border-top-0 border-left-0 border-right-0"
+        th:text="#{text.curso.titulo}">Mantenimiento de Cursos</h1>
+
+    <p>
+        <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/form}"
+           class="btn btn-success btn-xs">crear curso</a>
+    </p>
+
+    <table class="table table-striped">
+        <thead class="bg-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Créditos</th>
+            <th>Acciones</th>
+            <th>Documentos</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="curso : ${cursos}">
+            <td th:text="${curso.id}">1</td>
+            <td th:text="${curso.nombre}">Nombre curso</td>
+            <td th:text="${curso.creditos}">3</td>
+            <td>
+                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                   th:href="@{/form/{id}(id=${curso.id})}"
+                   class="btn btn-primary btn-xs"
+                   th:text="#{text.boton.editar}">Editar</a>
+
+                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                   th:href="@{/eliminar/{id}(id=${curso.id})}"
+                   class="btn btn-danger btn-xs"
+                   th:text="#{text.boton.eliminar}"
+                   onclick="return confirm('¿Estás seguro que quieres eliminar?');">Eliminar</a>
+            </td>
+            <td>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/ver(format=pdf)}"
+                   class="btn btn-danger btn-xs float-right mx-2">PDF</a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/ver(format=xlsx)}"
+                   class="btn btn-success btn-xs float-right">XLS/A</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>
